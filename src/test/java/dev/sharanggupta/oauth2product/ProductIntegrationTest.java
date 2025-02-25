@@ -156,4 +156,15 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
                         .header("Authorization", "Bearer " + getAccessToken()))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void testDeleteProductById_NotExisting_ShouldReturnNotFound() throws Exception {
+        // Use a non-existing product ID
+        long nonExistingProductId = 999L;
+
+        // Try to delete the non-existing product by ID
+        mockMvc.perform(delete("/products/" + nonExistingProductId)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isNotFound());
+    }
 }
