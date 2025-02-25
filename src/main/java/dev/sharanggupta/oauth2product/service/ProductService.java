@@ -34,4 +34,10 @@ public class ProductService {
         existingProduct.setPrice(product.getPrice());
         return repository.save(existingProduct);
     }
+
+    public void deleteById(Long id) {
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product " + id + " not found"));
+        repository.delete(product);
+    }
 }
