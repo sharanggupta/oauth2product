@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,5 +52,18 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
     void testGetAllProducts_Unauthorized_ShouldReturn401() throws Exception {
         mockMvc.perform(get("/products"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testCreateProduct_ShouldReturnCreatedProduct() throws Exception {
+        String newProductJson = "{ \"name\": \"Tablet\", \"price\": 499.99 }";
+
+        mockMvc.perform(post("/products")
+                        .contentType("application/json")
+                        .content(newProductJson)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("Tablet"))
+                .andExpect(jsonPath("$.price").value(499.99));
     }
 }
