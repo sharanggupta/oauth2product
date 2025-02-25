@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: productuser
+      POSTGRES_PASSWORD: productpass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0.3
+    container_name: keycloak
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      DB_VENDOR: h2
+      KEYCLOAK_HTTP_HOST: 0.0.0.0  # Replaces `-b` option
+      KEYCLOAK_HTTP_PORT: 8080  # Use HTTP port, not HTTPS
+      KEYCLOAK_IMPORT: /opt/keycloak/realms/keycloak-realm.json  # Import your realm file
+      KEYCLOAK_DEV_MODE: "true"  # Enable development mode
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./keycloak-realm.json:/opt/keycloak/realms/keycloak-realm.json  # Mount your realm JSON file
+    command: ["start-dev"]
+
+  app:
+    build: .
+    container_name: oauth2product
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/productdb
+      SPRING_DATASOURCE_USERNAME: productuser
+      SPRING_DATASOURCE_PASSWORD: productpass
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/product-realm
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/product-realm/protocol/openid-connect/certs
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - keycloak
+    entrypoint: ["/bin/bash", "/app/wait-for-it.sh", "postgres:5432", "--", "java", "-jar", "/app/app.jar"]
+
+volumes:
+  postgres_data:
