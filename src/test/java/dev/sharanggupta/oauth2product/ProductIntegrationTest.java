@@ -12,6 +12,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,5 +66,31 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Tablet"))
                 .andExpect(jsonPath("$.price").value(499.99));
+    }
+
+    @Test
+    void testUpdateProduct_ShouldReturnUpdatedProduct() throws Exception {
+        // Create a new product
+        String newProductJson = "{ \"name\": \"Tablet\", \"price\": 499.99 }";
+        String createdProductResponse = mockMvc.perform(post("/products")
+                        .contentType("application/json")
+                        .content(newProductJson)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        // Extract the created product's ID
+        JsonNode createdProduct = new ObjectMapper().readTree(createdProductResponse);
+        Long productId = createdProduct.get("id").asLong();
+
+        // Update the created product
+        String updatedProductJson = "{ \"name\": \"Updated Tablet\", \"price\": 599.99 }";
+        mockMvc.perform(put("/products/" + productId)
+                        .contentType("application/json")
+                        .content(updatedProductJson)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Updated Tablet"))
+                .andExpect(jsonPath("$.price").value(599.99));
     }
 }
