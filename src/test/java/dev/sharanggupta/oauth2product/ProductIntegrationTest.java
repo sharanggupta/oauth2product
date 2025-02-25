@@ -13,6 +13,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -126,6 +127,32 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
 
         // Try to get the non-existing product by ID
         mockMvc.perform(get("/products/" + nonExistingProductId)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDeleteProductById_ShouldDeleteProduct() throws Exception {
+        // Create a new product
+        String newProductJson = "{ \"name\": \"Tablet\", \"price\": 499.99 }";
+        String createdProductResponse = mockMvc.perform(post("/products")
+                        .contentType("application/json")
+                        .content(newProductJson)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        // Extract the created product's ID
+        JsonNode createdProduct = new ObjectMapper().readTree(createdProductResponse);
+        long productId = createdProduct.get("id").asLong();
+
+        // Delete the product by ID
+        mockMvc.perform(delete("/products/" + productId)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isNoContent());
+
+        // Try to get the deleted product by ID
+        mockMvc.perform(get("/products/" + productId)
                         .header("Authorization", "Bearer " + getAccessToken()))
                 .andExpect(status().isNotFound());
     }
