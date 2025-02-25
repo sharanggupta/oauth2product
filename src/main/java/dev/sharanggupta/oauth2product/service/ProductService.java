@@ -20,7 +20,7 @@ public class ProductService {
         return repository.findAll();
     }
     public Product findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        return repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found"));
     }
 
     public Product create(Product product) {
