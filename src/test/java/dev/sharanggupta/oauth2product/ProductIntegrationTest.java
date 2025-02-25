@@ -39,7 +39,7 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
     }
 
     @Test
-    void testGetAllProducts_Authorized_ShouldReturnSampleData() throws Exception {
+    void testGetAllProducts_Authorized_ShouldReturnAllProducts() throws Exception {
         mockMvc.perform(get("/products").header("Authorization", "Bearer " + getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -50,7 +50,7 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
     }
 
     @Test
-    void testGetAllProducts_Unauthorized_ShouldReturn401() throws Exception {
+    void testGetAllProducts_Unauthorized_ShouldReturnUnauthorised() throws Exception {
         mockMvc.perform(get("/products"))
                 .andExpect(status().isUnauthorized());
     }
