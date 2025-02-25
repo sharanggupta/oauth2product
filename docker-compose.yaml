@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - "5433:5432" # Changed the host port to 5433
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: h2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak-realm.json:/opt/jboss/keycloak/realm-imports/keycloak-realm.json
+    command:
+      - "-b 0.0.0.0"
+      - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+      - "-Dkeycloak.import=/opt/jboss/keycloak/realm-imports/keycloak-realm.json"
+    networks:
+      - backend
+
+  app:
+    image: oauth2-product-app-image
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testdb
+      SPRING_DATASOURCE_USERNAME: test
+      SPRING_DATASOURCE_PASSWORD: test
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/product-realm
+      SERVER_PORT: 8081  # Added to change the port for the Spring Boot application
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - keycloak
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:

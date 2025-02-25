@@ -63,6 +63,14 @@ public class ProductIntegrationTest {
 
     @Test
     void testGetAllProducts_Authorized_ShouldReturnSampleData() throws Exception {
+        String response = mockMvc.perform(get("/products").header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println("Response: " + response);
+
         mockMvc.perform(get("/products").header("Authorization", "Bearer " + getAccessToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
