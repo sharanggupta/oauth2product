@@ -81,7 +81,7 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
 
         // Extract the created product's ID
         JsonNode createdProduct = new ObjectMapper().readTree(createdProductResponse);
-        Long productId = createdProduct.get("id").asLong();
+        long productId = createdProduct.get("id").asLong();
 
         // Update the created product
         String updatedProductJson = "{ \"name\": \"Updated Tablet\", \"price\": 599.99 }";
@@ -92,5 +92,17 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Updated Tablet"))
                 .andExpect(jsonPath("$.price").value(599.99));
+    }
+
+    @Test
+    void testUpdateProductNotExisting_ShouldReturnNotFound() throws Exception {
+        long notExistingProductId = 100L;
+        // Update a non-existing product
+        String updatedProductJson = "{ \"name\": \"Updated Tablet\", \"price\": 599.99 }";
+        mockMvc.perform(put("/products/" + notExistingProductId)
+                        .contentType("application/json")
+                        .content(updatedProductJson)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isNotFound());
     }
 }
