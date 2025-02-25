@@ -13,5 +13,6 @@ class Oauth2productApplicationTests extends BaseIntegrationTest{
 
 	@Test
 	void contextLoads() {
+		// This test is empty because it is only used to check if the Spring context loads successfully
 	}
 }
