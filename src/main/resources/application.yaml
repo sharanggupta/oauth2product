@@ -13,3 +13,11 @@ spring:
         jwt:
           issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}
           jwk-set-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI}
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true  # In case the schema is already created, Flyway will set a baseline
+    url: ${SPRING_DATASOURCE_URL}  # Ensure the datasource URL is also applied to Flyway
+    user: ${SPRING_DATASOURCE_USERNAME}  # Flyway DB username
+    password: ${SPRING_DATASOURCE_PASSWORD}  # Flyway DB password

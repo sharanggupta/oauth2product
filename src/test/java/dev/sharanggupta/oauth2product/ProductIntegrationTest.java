@@ -109,7 +109,7 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
 
     @Test
     void testGetProductById_ShouldReturnProduct() throws Exception {
-        // Use the product ID from the setup data in init.sql
+        // Use the product ID from the data setup by flyway
         long productId = 1L;
 
         // Get the product by ID
