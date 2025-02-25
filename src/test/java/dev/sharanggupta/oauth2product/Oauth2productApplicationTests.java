@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Import(TestContainersConfig.class)
 @ActiveProfiles("test")
 @SpringBootTest
-class Oauth2productApplicationTests {
+class Oauth2productApplicationTests extends BaseIntegrationTest{
 
 	@Test
 	void contextLoads() {
