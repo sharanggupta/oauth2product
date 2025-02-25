@@ -24,7 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/products/**").authenticated()
+                        .requestMatchers("/products/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);

@@ -3,16 +3,11 @@ package dev.sharanggupta.oauth2product;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
-import dasniko.testcontainers.keycloak.KeycloakContainer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,29 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class ProductIntegrationTest {
-
-    @Container
-    static KeycloakContainer keycloak = new KeycloakContainer("quay.io/keycloak/keycloak:latest")
-            .withRealmImportFile("/keycloak-realm.json");
-
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
-            .withDatabaseName("testdb")
-            .withUsername("test")
-            .withPassword("test")
-            .withInitScript("init.sql");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
-                () -> keycloak.getAuthServerUrl() + "/realms/product-realm");
-        registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
-                () -> keycloak.getAuthServerUrl() + "/realms/product-realm/protocol/openid-connect/certs");
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
+public class ProductIntegrationTest extends BaseIntegrationTest{
 
     @Autowired
     private MockMvc mockMvc;
@@ -72,5 +45,11 @@ public class ProductIntegrationTest {
                 .andExpect(jsonPath("$[0].price").value(999.99))
                 .andExpect(jsonPath("$[1].name").value("Phone"))
                 .andExpect(jsonPath("$[1].price").value(699.99));
+    }
+
+    @Test
+    void testGetAllProducts_Unauthorized_ShouldReturn401() throws Exception {
+        mockMvc.perform(get("/products"))
+                .andExpect(status().isUnauthorized());
     }
 }
