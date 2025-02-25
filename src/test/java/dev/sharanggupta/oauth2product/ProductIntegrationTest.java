@@ -95,13 +95,37 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
     }
 
     @Test
-    void testUpdateProductNotExisting_ShouldReturnNotFound() throws Exception {
+    void testUpdateProduct_NotExisting_ShouldReturnNotFound() throws Exception {
         long notExistingProductId = 100L;
         // Update a non-existing product
         String updatedProductJson = "{ \"name\": \"Updated Tablet\", \"price\": 599.99 }";
         mockMvc.perform(put("/products/" + notExistingProductId)
                         .contentType("application/json")
                         .content(updatedProductJson)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetProductById_ShouldReturnProduct() throws Exception {
+        // Use the product ID from the setup data in init.sql
+        long productId = 1L;
+
+        // Get the product by ID
+        mockMvc.perform(get("/products/" + productId)
+                        .header("Authorization", "Bearer " + getAccessToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Laptop"))  // Assuming the product name is "Laptop"
+                .andExpect(jsonPath("$.price").value(999.99));  // Assuming the product price is 999.99
+    }
+
+    @Test
+    void testGetProductById_NotExisting_ShouldReturnNotFound() throws Exception {
+        // Use a non-existing product ID
+        long nonExistingProductId = 999L;
+
+        // Try to get the non-existing product by ID
+        mockMvc.perform(get("/products/" + nonExistingProductId)
                         .header("Authorization", "Bearer " + getAccessToken()))
                 .andExpect(status().isNotFound());
     }
