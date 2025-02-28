@@ -1,0 +1,17 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: product-client
+            client-secret: product-secret
+            authorization-grant-type: client_credentials
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8081/realms/product-realm
+            token-uri: http://localhost:8081/realms/product-realm/protocol/openid-connect/token
+
+resource-server:
+  url: http://localhost:8080

@@ -1,6 +1,6 @@
-package dev.sharanggupta.oauth2resourceserver.repository;
+package dev.sharanggupta.oauth2client.oauth2resourceserver.repository;
 
-import dev.sharanggupta.oauth2resourceserver.domain.Product;
+import dev.sharanggupta.oauth2client.oauth2resourceserver.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

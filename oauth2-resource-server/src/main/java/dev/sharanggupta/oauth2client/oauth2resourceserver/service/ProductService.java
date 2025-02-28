@@ -1,8 +1,8 @@
-package dev.sharanggupta.oauth2resourceserver.service;
+package dev.sharanggupta.oauth2client.oauth2resourceserver.service;
 
-import dev.sharanggupta.oauth2resourceserver.domain.Product;
-import dev.sharanggupta.oauth2resourceserver.exception.ProductNotFoundException;
-import dev.sharanggupta.oauth2resourceserver.repository.ProductRepository;
+import dev.sharanggupta.oauth2client.oauth2resourceserver.domain.Product;
+import dev.sharanggupta.oauth2client.oauth2resourceserver.exception.ProductNotFoundException;
+import dev.sharanggupta.oauth2client.oauth2resourceserver.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

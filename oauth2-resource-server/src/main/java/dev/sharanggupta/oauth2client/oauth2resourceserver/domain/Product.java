@@ -1,4 +1,4 @@
-package dev.sharanggupta.oauth2resourceserver.domain;
+package dev.sharanggupta.oauth2client.oauth2resourceserver.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

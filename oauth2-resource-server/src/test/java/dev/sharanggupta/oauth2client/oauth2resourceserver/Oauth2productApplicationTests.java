@@ -1,6 +1,6 @@
-package dev.sharanggupta.oauth2resourceserver;
+package dev.sharanggupta.oauth2client.oauth2resourceserver;
 
-import dev.sharanggupta.oauth2resourceserver.config.TestContainersConfig;
+import dev.sharanggupta.oauth2client.oauth2resourceserver.config.TestContainersConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;

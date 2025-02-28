@@ -1,4 +1,4 @@
-package dev.sharanggupta.oauth2resourceserver;
+package dev.sharanggupta.oauth2client.oauth2resourceserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
