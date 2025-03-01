@@ -1,7 +1,7 @@
-package dev.sharanggupta.oauth2client.oauth2resourceserver.controller;
+package dev.sharanggupta.oauth2resourceserver.controller;
 
-import dev.sharanggupta.oauth2client.oauth2resourceserver.domain.Product;
-import dev.sharanggupta.oauth2client.oauth2resourceserver.service.ProductService;
+import dev.sharanggupta.oauth2resourceserver.domain.Product;
+import dev.sharanggupta.oauth2resourceserver.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

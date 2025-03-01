@@ -1,4 +1,4 @@
-package dev.sharanggupta.oauth2client.oauth2resourceserver;
+package dev.sharanggupta.oauth2resourceserver;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

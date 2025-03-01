@@ -1,6 +1,6 @@
-package dev.sharanggupta.oauth2client.oauth2resourceserver.exceptionhandler;
+package dev.sharanggupta.oauth2resourceserver.exceptionhandler;
 
-import dev.sharanggupta.oauth2client.oauth2resourceserver.exception.ProductNotFoundException;
+import dev.sharanggupta.oauth2resourceserver.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

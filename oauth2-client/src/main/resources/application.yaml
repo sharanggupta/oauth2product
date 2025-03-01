@@ -10,11 +10,8 @@ spring:
             scope: openid
         provider:
           keycloak:
-            issuer-uri: http://localhost:8081/realms/product-realm
-            token-uri: http://localhost:8081/realms/product-realm/protocol/openid-connect/token
+            issuer-uri: http://keycloak:8080/realms/product-realm
+            token-uri: http://keycloak:8080/realms/product-realm/protocol/openid-connect/token
 
 resource-server:
-  url: http://localhost:8080
-logging:
-  level:
-    org.springframework.boot.autoconfigure: DEBUG
+  url: http://resource-server:8080

@@ -100,6 +100,8 @@ class ProductControllerTest {
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.security.oauth2.client.provider.keycloak.issuer-uri",
                 () -> "http://localhost:8081/realms/product-realm");
+        registry.add("spring.security.oauth2.client.provider.keycloak.token-uri",
+                () -> "http://localhost:8081/realms/product-realm/protocol/openid-connect/token");
         registry.add("spring.security.oauth2.client.registration.keycloak.client-id",
                 () -> "test-client");
         registry.add("spring.security.oauth2.client.registration.keycloak.client-secret",
