@@ -27,7 +27,7 @@ docker compose ps
 curl -v -X GET http://localhost:8080/products
 ```
 
-4. Get an access token:
+5. Get an access token:
 ```bash
 access_token=$(curl -X POST http://localhost:8081/realms/product-realm/protocol/openid-connect/token \
 -H "Content-Type: application/x-www-form-urlencoded" \
@@ -38,7 +38,7 @@ access_token=$(curl -X POST http://localhost:8081/realms/product-realm/protocol/
 -d "password=password" | jq -r .access_token)
 ```
 
-5. Access the products endpoint:
+6. Access the products endpoint:
 ```bash
 curl -X GET http://localhost:8080/products \
 -H "Authorization: Bearer $access_token"
