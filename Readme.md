@@ -32,7 +32,7 @@ curl -v -X GET http://localhost:8080/products
 ```bash
 access_token=$(curl -X POST http://localhost:8081/realms/product-realm/protocol/openid-connect/token \
 -H "Content-Type: application/x-www-form-urlencoded" \
--d "grant_type=password" \
+-d "grant_type=client_credentials" \
 -d "client_id=product-client" \
 -d "client_secret=product-secret" \
 -d "username=test-user" \
@@ -45,7 +45,7 @@ curl -X GET http://localhost:8080/products \
 -H "Authorization: Bearer $access_token"
 ```
 
-6. Test the OAuth2 client flow using a spring OAuth2 client (which handles token management automatically):
+7. Test the OAuth2 client flow using a spring OAuth2 client (which handles token management automatically):
 ```bash
 # Get products through the OAuth2 client (with automatic token management)
 curl -X GET http://localhost:8082/retail/products

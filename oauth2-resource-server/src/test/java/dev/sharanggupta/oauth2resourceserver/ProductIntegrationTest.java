@@ -28,11 +28,9 @@ public class ProductIntegrationTest extends BaseIntegrationTest{
     private String getAccessToken() throws Exception {
         com.mashape.unirest.http.HttpResponse<String> response = Unirest.post(keycloak.getAuthServerUrl() + "/realms/product-realm/protocol/openid-connect/token")
                 .header("Content-Type", "application/x-www-form-urlencoded")
-                .field("grant_type", "password")
+                .field("grant_type", "client_credentials")
                 .field("client_id", "product-client")
                 .field("client_secret", "product-secret")
-                .field("username", "test-user")
-                .field("password", "password")
                 .asString();
 
         JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());

@@ -11,7 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@PreAuthorize("hasRole('USER')")
+//@PreAuthorize("hasRole('USER')")
+//@PreAuthorize("hasAuthority('SCOPE_read')")
 public class ProductController {
     private final ProductService productService;
 

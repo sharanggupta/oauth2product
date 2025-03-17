@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "48c36106-faed-4d11-b2de-827723dc3e90",
+		"name": "Oauth2 Product",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37604437"
+	},
+	"item": [
+		{
+			"name": "Resource Server",
+			"item": [
+				{
+					"name": "Get products without access token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products with access token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"products"
+							]
+						},
+						"description": "Generated from cURL: curl -X GET http://localhost:8080/products \\\n-H \"Authorization: Bearer $access_token\""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authorisation Server",
+			"item": [
+				{
+					"name": "Get access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"access_token\", pm.response.json().access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "product-client",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "product-secret",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8081/realms/product-realm/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"realms",
+								"product-realm",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						},
+						"description": "Generated from cURL: curl -X POST http://localhost:8081/realms/product-realm/protocol/openid-connect/token \\\n-H \"Content-Type: application/x-www-form-urlencoded\" \\\n-d \"grant_type=client_credentials\" \\\n-d \"client_id=product-client\" \\\n-d \"client_secret=product-secret\" \\\n-d \"username=test-user\" \\\n-d \"password=password\""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client Application",
+			"item": [
+				{
+					"name": "Oauth2 client in spring",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/retail/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"retail",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": ""
+		}
+	]
+}
